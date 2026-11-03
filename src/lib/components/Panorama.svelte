@@ -30,6 +30,7 @@
 				{
 					position: $globalData.actual,
 					addressControl: false,
+					showRoadLabels: false,
 					panControlOptions: {
 						position: google.maps.ControlPosition.LEFT_CENTER,
 					},
@@ -48,9 +49,9 @@
 
 		setTimeout(() => {
 			// Un-invert colours and dismiss warning when API key is invalid or exhausted
-			const canvas = document.querySelector(".mapsConsumerUiSceneCoreScene__canvas") as HTMLCanvasElement;
+			const canvas = document.querySelector(".mapsImagerySceneScene__canvas") as HTMLCanvasElement;
 			if (canvas && canvas.style.filter == "invert(1)") {
-				(document.querySelector(".mapsConsumerUiSceneCoreScene__root")! as HTMLDivElement).style.filter = "invert(1)";
+				(document.querySelector(".mapsImagerySceneScene__root")! as HTMLDivElement).style.filter = "invert(1)";
 				(document.evaluate(
 					"//div[text() = 'For development purposes only']",
 					document,
