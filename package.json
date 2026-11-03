@@ -9,7 +9,7 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^3.3",
+		"@sveltejs/adapter-vercel": "^5.10",
 		"@sveltejs/kit": "^2.70",
 		"@sveltejs/vite-plugin-svelte": "^3.1",
 		"@types/google.maps": "^3.66",
