@@ -8,6 +8,11 @@
 
 	export let hidden: boolean;
 
+	export function guess() {
+		if ($globalData.state != GameState.PLAY || $playerData.hasGuessed) return;
+		$playerData.hasGuessed = true;
+	}
+
 	export function resetMap() {
 		// Reset map elements
 		$allMarkers.forEach((marker) => {
@@ -59,7 +64,7 @@
 	{#if $globalData.state == GameState.PLAY && $playerData.guess && !$playerData.hasGuessed}
 		<button
 			class="absolute bottom-0 p-2 w-full font-semibold text-md text-white bg-green-500 rounded-b-md z-20"
-			on:click={() => $playerData.hasGuessed = true}
+			on:click={guess}
 		>
 			Guess
 		</button>
