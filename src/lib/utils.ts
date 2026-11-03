@@ -8,13 +8,26 @@ export function random(min: number, max: number): number {
 }
 
 // Choose a random location on land
-export function chooseLocation() {
+export async function chooseLocation(streetView: any) {
 	const location = {
 		lat: random(-70, 70),
 		lng: random(-180, 180),
 	};
-	if (isSea(location.lat, location.lng)) return chooseLocation();
-	else return location;
+	if (isSea(location.lat, location.lng)) return chooseLocation(streetView);
+
+	let loc;
+	try {
+		loc = (await (new streetView.StreetViewService()).getPanorama({
+			location,
+			radius: 1000,
+			source: streetView.StreetViewSource.OUTDOOR,
+			preference: streetView.StreetViewPreference.BEST,
+		})).data.location?.latLng!;
+	} catch {
+		return chooseLocation(streetView);
+	}
+
+	return { lat: loc.lat(), lng: loc.lng() };
 }
 
 export function putMarker(

@@ -12,15 +12,11 @@
 	}
 
 	export async function resetPanorama() {
+		let actual = $globalData.actual;
 		if ($host) {
 			// Fetch closest panorama location
-			const loc = (await (new $streetView.StreetViewService()).getPanorama({
-				location: chooseLocation(),
-				radius: 3e6,
-				sources: [$streetView.StreetViewSource.OUTDOOR],
-				preference: google.maps.StreetViewPreference.NEAREST,
-			})).data.location?.latLng!;
-			$globalData.actual = { lat: loc.lat(), lng: loc.lng() };
+			actual = await chooseLocation($streetView);
+			globalData.update((data) => ({ ...data, actual }));
 		}
 
 		// Initialise panorama
@@ -28,7 +24,7 @@
 			$pano = new google.maps.StreetViewPanorama(
 				panoContainer,
 				{
-					position: $globalData.actual,
+					position: actual,
 					addressControl: false,
 					showRoadLabels: false,
 					panControlOptions: {
@@ -43,7 +39,7 @@
 				},
 			);
 		} else {
-			$pano.setPosition($globalData.actual);
+			$pano.setPosition(actual);
 		}
 		$pano.setPov($pano.getPhotographerPov());
 
