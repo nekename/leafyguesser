@@ -21,6 +21,7 @@
 
 		// Initialise panorama
 		if (!$pano) {
+			const settings = $globalData.settings;
 			$pano = new google.maps.StreetViewPanorama(
 				panoContainer,
 				{
@@ -36,6 +37,12 @@
 					motionTracking: false,
 					motionTrackingControl: false,
 					fullscreenControl: false,
+					linksControl: settings.move,
+					clickToGo: settings.move,
+					panControl: settings.pan,
+					zoomControl: settings.zoom,
+					scrollwheel: settings.zoom,
+					disableDoubleClickZoom: !settings.zoom,
 				},
 			);
 		} else {
