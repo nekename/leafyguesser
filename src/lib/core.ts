@@ -79,7 +79,8 @@ export function initMultiplayer() {
 	if (get(host)) {
 		g.updateGlobalData(get(globalData));
 	} else {
-		globalData.set(g.getGlobalData());
+		const sharedData = g.getGlobalData();
+		if (sharedData?.settings) globalData.set(sharedData);
 	}
 	globalData.subscribe((value) => g.updateGlobalData(value));
 	playerData.subscribe((value) => g.updatePlayerData(value));

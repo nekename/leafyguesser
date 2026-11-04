@@ -43,7 +43,7 @@ export async function createGame() {
 		globalData: {},
 		players: {},
 	};
-	set(ref(database, id.toString()), data);
+	await set(ref(database, id.toString()), data);
 	return id;
 }
 
@@ -57,7 +57,7 @@ export async function joinGame(id: number, username: string, playerData: any = n
 	if (data.players == undefined) data.players = {};
 	if (Object.hasOwn(data.players, username)) throw new Error("UsernameAlreadyTaken");
 
-	update(ref(database, id.toString() + "/players"), {
+	await update(ref(database, id.toString() + "/players"), {
 		[username]: playerData,
 	});
 	data.players[username] = playerData;
@@ -105,7 +105,7 @@ export class Game {
 		this.players = players;
 
 		this.localPlayerName = localPlayerName;
-		this.localPlayerDataCache = players[this.localPlayerName];
+		this.localPlayerDataCache = structuredClone(players[this.localPlayerName] ?? {});
 		delete this.localPlayerDataCache._;
 
 		this.handlers = {
