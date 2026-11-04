@@ -8,7 +8,7 @@ export function random(min: number, max: number): number {
 }
 
 // Choose a random location on land
-export async function chooseLocation(streetView: any) {
+export async function chooseLocation(streetView: google.maps.StreetViewLibrary): Promise<{ lat: number; lng: number }> {
 	const location = {
 		lat: random(-70, 70),
 		lng: random(-180, 180),
@@ -35,7 +35,6 @@ export function putMarker(
 	type: "actual" | "guess" | "otherPlayer",
 	colour: string,
 ): google.maps.marker.AdvancedMarkerElement {
-	// @ts-expect-error Deno does not respect tsconfig `extends`
 	const span = document.createElement("span");
 	span.style.fontFamily = "'Material Icons'";
 	span.style.fontSize = "18px";

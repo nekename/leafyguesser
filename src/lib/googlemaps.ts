@@ -3,7 +3,7 @@
 
 import { PUBLIC_GOOGLE_MAPS_API_KEY } from "$env/static/public";
 import { browser } from "$app/environment";
-import { writable } from "svelte/store";
+import { type Writable, writable } from "svelte/store";
 
 if (browser) {
 	((g) => {
@@ -43,9 +43,9 @@ if (browser) {
 	});
 }
 
-export const maps = writable(),
-	streetView = writable(),
-	markers = writable();
+export const maps: Writable<google.maps.MapsLibrary> = writable(),
+	streetView: Writable<google.maps.StreetViewLibrary> = writable(),
+	markers: Writable<google.maps.MarkerLibrary> = writable();
 
 export async function importLibraries() {
 	maps.set(await google.maps.importLibrary("maps"));

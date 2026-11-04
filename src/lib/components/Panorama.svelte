@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { globalData, host, pano } from "$lib/core";
+	import { type GlobalData, globalData, host, pano } from "$lib/core";
 	import { streetView } from "$lib/googlemaps";
 	import { chooseLocation } from "$lib/utils";
 
@@ -16,7 +16,7 @@
 		if ($host) {
 			// Fetch closest panorama location
 			actual = await chooseLocation($streetView);
-			globalData.update((data) => ({ ...data, actual }));
+			globalData.update((data: GlobalData) => ({ ...data, actual }));
 		}
 
 		// Initialise panorama

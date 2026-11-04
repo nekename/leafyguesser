@@ -15,12 +15,12 @@
 
 	export function resetMap() {
 		// Reset map elements
-		$allMarkers.forEach((marker) => {
+		$allMarkers.forEach((marker: google.maps.marker.AdvancedMarkerElement) => {
 			marker.map = null;
 			marker.remove();
 		});
 		$allMarkers = [];
-		$allPolylines.forEach((polyline) => polyline.setMap(null));
+		$allPolylines.forEach((polyline: google.maps.Polyline) => polyline.setMap(null));
 		$allPolylines = [];
 
 		// Initialise map
