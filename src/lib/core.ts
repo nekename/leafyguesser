@@ -32,7 +32,7 @@ export const globalData: Writable<GlobalData> = writable({
 		move: true,
 		pan: true,
 		zoom: true,
-		timer: 120,
+		timer: 60,
 	},
 });
 
