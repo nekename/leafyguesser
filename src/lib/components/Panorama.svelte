@@ -41,6 +41,7 @@
 		} else {
 			$pano.setPosition(actual);
 		}
+		$pano.setZoom(0);
 		$pano.setPov($pano.getPhotographerPov());
 
 		setTimeout(() => {
