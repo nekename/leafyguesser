@@ -18,6 +18,8 @@
 	let panoContainer: HTMLDivElement;
 	let pano: google.maps.StreetViewPanorama | undefined = undefined;
 
+	let resetOnLoad = true;
+
 	onMount(() => {
 		// Initialise panorama
 		pano = new google.maps.StreetViewPanorama(panoContainer, {
@@ -41,12 +43,19 @@
 			scrollwheel: zoom,
 			disableDoubleClickZoom: !zoom
 		});
-		pano.setZoom(0);
-		pano.setPov(pano.getPhotographerPov());
 
-		setTimeout(() => {
+		pano.addListener("pano_changed", () => {
+			if (!pano || !resetOnLoad) return;
+			resetOnLoad = false;
+			pano.setZoom(0);
+			pano.setPov(pano.getPhotographerPov());
+		});
+
+		setInterval(() => {
 			// Un-invert colours and dismiss warning when API key is invalid or exhausted
-			const canvas = document.querySelector(".mapsImagerySceneScene__canvas") as HTMLCanvasElement;
+			const canvas = panoContainer.querySelector(
+				".mapsImagerySceneScene__canvas"
+			) as HTMLCanvasElement;
 			if (canvas && canvas.style.filter == "invert(1)") {
 				(document.querySelector(".mapsImagerySceneScene__root")! as HTMLDivElement).style.filter =
 					"invert(1)";
@@ -70,6 +79,7 @@
 
 	// Update panorama when props change
 	$effect(() => {
+		resetOnLoad = true;
 		if (pano) pano.setPosition(position);
 	});
 	$effect(() => {
