@@ -13,7 +13,7 @@
 		confirm
 	}: {
 		mapProvider: "google" | "mapbox";
-		displayMode: "play" | "results";
+		displayMode: "setup" | "play" | "results";
 		actual: Position;
 		guess?: Position;
 		otherPlayers: { colour: string; position: Position }[];
@@ -40,7 +40,7 @@
 	}
 
 	$effect(() => {
-		if (displayMode == "results") {
+		if (displayMode == "setup" || displayMode == "results") {
 			for (const otherPlayer of otherPlayers) {
 				putMarker(otherPlayer.position, "otherPlayer", otherPlayer.colour);
 			}
@@ -86,12 +86,12 @@
 		/>
 	{/if}
 
-	{#if displayMode == "play"}
+	{#if displayMode == "setup" || displayMode == "play"}
 		<button
 			onclick={confirm}
 			class="text-md absolute bottom-0 z-20 w-full cursor-pointer rounded-b-md bg-green-800 p-2 font-semibold text-white"
 		>
-			Guess
+			{displayMode == "setup" ? "Start game" : "Guess"}
 		</button>
 	{/if}
 </div>

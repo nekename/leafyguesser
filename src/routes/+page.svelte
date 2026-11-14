@@ -1,4 +1,6 @@
 <script lang="ts">
+	import favicon from "#lib/assets/favicon.svg";
+	import Setup from "#lib/components/Setup.svelte";
 	import Map from "#lib/components/Map.svelte";
 	import Panorama from "#lib/components/Panorama.svelte";
 	import ResultsView from "#lib/components/ResultsView.svelte";
@@ -15,12 +17,6 @@
 		pan = $state(true),
 		zoom = $state(true),
 		mapProvider = $state<"google" | "mapbox">("mapbox");
-	$effect(() => {
-		if (!pan) {
-			move = false;
-			zoom = false;
-		}
-	});
 
 	let position = $state<Position | null>(null);
 	$effect(() => {
@@ -29,9 +25,13 @@
 		}
 	});
 
-	let displayMode = $state<"play" | "results">("play");
+	let displayMode = $state<"setup" | "play" | "results">("setup");
 	function confirm() {
-		displayMode = "results";
+		if (displayMode == "setup") {
+			proceed();
+		} else {
+			displayMode = "results";
+		}
 	}
 	function proceed() {
 		displayMode = "play";
@@ -48,13 +48,19 @@
 	{/if}
 {/if}
 
-<div class="absolute top-4 right-4 z-10">
-	<input type="checkbox" bind:checked={move} disabled={!pan} /> Move
-	<input type="checkbox" bind:checked={pan} /> Pan
-	<input type="checkbox" bind:checked={zoom} disabled={!pan} /> Zoom
+<div
+	class="absolute top-0 right-0 z-10 flex flex-col space-y-2 rounded-bl-lg p-2 backdrop-blur-2xl"
+>
+	<div class="flex flex-row items-center justify-end space-x-1">
+		<h1
+			class="text-xl font-bold text-green-800 [text-shadow:-0.5px_-0.5px_0_#16a34a,0.5px_-0.5px_0_#16a34a,-0.5px_0.5px_0_#16a34a,0.5px_0.5px_0_#16a34a]"
+		>
+			Leafyguesser
+		</h1>
+		<img src={favicon} alt="Leafyguesser logo" class="h-6 w-auto" />
+	</div>
 
-	<select bind:value={mapProvider}>
-		<option value="google">Google</option>
-		<option value="mapbox">Mapbox</option>
-	</select>
+	{#if displayMode == "setup"}
+		<Setup bind:move bind:pan bind:zoom bind:mapProvider />
+	{/if}
 </div>
