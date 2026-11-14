@@ -4,6 +4,7 @@
 	import ResultsView from "#lib/components/ResultsView.svelte";
 
 	import { importLibraries, librariesImported } from "#lib/googlemaps.ts";
+	import { chooseLocation } from "#lib/location.ts";
 	import type { Position } from "#lib/types.ts";
 
 	import { browser } from "$app/env";
@@ -20,10 +21,6 @@
 			zoom = false;
 		}
 	});
-
-	async function chooseLocation(): Promise<Position> {
-		return { lat: 51.500786, lng: -0.124681 }; // Stub
-	}
 
 	let position = $state<Position | null>(null);
 	$effect(() => {
