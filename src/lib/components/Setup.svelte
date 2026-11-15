@@ -4,6 +4,7 @@
 	let {
 		hosting = $bindable(undefined),
 		gameCode = $bindable(undefined),
+		joinState,
 		move = $bindable(true),
 		pan = $bindable(true),
 		zoom = $bindable(true),
@@ -11,6 +12,7 @@
 	}: {
 		hosting: boolean | undefined;
 		gameCode: string | number | undefined;
+		joinState: { state: "idle" | "joining" | "joined" } | { state: "error"; message: string };
 		move: boolean;
 		pan: boolean;
 		zoom: boolean;
@@ -98,7 +100,7 @@
 					</select>
 				</td>
 			</tr>
-		{:else}
+		{:else if joinState.state == "idle"}
 			<tr>
 				<td class="px-2 py-1 text-center">Enter game code</td>
 			</tr>
@@ -115,6 +117,22 @@
 								.padStart(6, "0")}
 						onwheel={(event) => event.preventDefault()}
 					/>
+				</td>
+			</tr>
+		{:else if joinState.state == "joining"}
+			<tr>
+				<td class="my-4 flex flex-row items-end justify-center space-x-0.5">
+					<span>Joining game</span>
+					<span class="mb-1.5"><LoadingBounce /></span>
+				</td>
+			</tr>
+		{:else if joinState.state == "error"}
+			<tr>
+				<td class="px-2 py-1 text-center">Failed to join game</td>
+			</tr>
+			<tr>
+				<td class="px-2 py-1 text-center">
+					<span class="text-sm text-red-200">{joinState.message}</span>
 				</td>
 			</tr>
 		{/if}

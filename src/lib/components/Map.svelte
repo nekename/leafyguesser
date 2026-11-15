@@ -8,6 +8,7 @@
 		mapProvider,
 		displayMode,
 		buttonText,
+		buttonDisabled,
 		actual,
 		guess = $bindable(),
 		otherPlayers,
@@ -16,6 +17,7 @@
 		mapProvider: "google" | "mapbox";
 		displayMode: "setup" | "play" | "results";
 		buttonText: string | null;
+		buttonDisabled: boolean;
 		actual: Position;
 		guess?: Position;
 		otherPlayers: { colour: string; position: Position }[];
@@ -54,6 +56,7 @@
 
 	function onMapClick(position: Position) {
 		if (displayMode == "play") {
+			guess = position;
 			putMarker(position, "guess", "hsl(0, 100%, 63%)");
 		}
 	}
@@ -91,7 +94,11 @@
 	{#if buttonText && (displayMode == "setup" || displayMode == "play")}
 		<button
 			onclick={confirm}
-			class="text-md absolute bottom-0 z-20 w-full cursor-pointer rounded-b-md bg-green-800 p-2 font-semibold text-white"
+			class={[
+				"text-md absolute bottom-0 z-20 w-full rounded-b-md bg-green-800 p-2 font-semibold text-white",
+				buttonDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+			]}
+			disabled={buttonDisabled}
 		>
 			{buttonText}
 		</button>
