@@ -51,7 +51,7 @@
 			pano.setPov(pano.getPhotographerPov());
 		});
 
-		setInterval(() => {
+		const interval = setInterval(() => {
 			// Un-invert colours and dismiss warning when API key is invalid or exhausted
 			const canvas = panoContainer.querySelector(
 				".mapsImagerySceneScene__canvas"
@@ -75,6 +75,8 @@
 				);
 			}
 		}, 500);
+
+		return () => clearInterval(interval);
 	});
 
 	// Update panorama when props change
