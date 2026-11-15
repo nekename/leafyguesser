@@ -14,5 +14,6 @@ export default defineConfig({
 			adapter: adapter()
 		})
 	],
+	ssr: { noExternal: ["mapbox-gl"] },
 	server: { allowedHosts: true }
 });
