@@ -7,6 +7,7 @@
 	let {
 		mapProvider,
 		displayMode,
+		buttonText,
 		actual,
 		guess = $bindable(),
 		otherPlayers,
@@ -14,6 +15,7 @@
 	}: {
 		mapProvider: "google" | "mapbox";
 		displayMode: "setup" | "play" | "results";
+		buttonText: string | null;
 		actual: Position;
 		guess?: Position;
 		otherPlayers: { colour: string; position: Position }[];
@@ -86,12 +88,12 @@
 		/>
 	{/if}
 
-	{#if displayMode == "setup" || displayMode == "play"}
+	{#if buttonText && (displayMode == "setup" || displayMode == "play")}
 		<button
 			onclick={confirm}
 			class="text-md absolute bottom-0 z-20 w-full cursor-pointer rounded-b-md bg-green-800 p-2 font-semibold text-white"
 		>
-			{displayMode == "setup" ? "Start game" : "Guess"}
+			{buttonText}
 		</button>
 	{/if}
 </div>

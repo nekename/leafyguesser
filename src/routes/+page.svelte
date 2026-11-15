@@ -1,9 +1,9 @@
 <script lang="ts">
 	import favicon from "#lib/assets/favicon.svg";
-	import Setup from "#lib/components/Setup.svelte";
 	import Map from "#lib/components/Map.svelte";
 	import Panorama from "#lib/components/Panorama.svelte";
 	import ResultsView from "#lib/components/ResultsView.svelte";
+	import Setup from "#lib/components/Setup.svelte";
 
 	import { importLibraries, librariesImported } from "#lib/googlemaps.ts";
 	import { chooseLocation } from "#lib/location.ts";
@@ -13,7 +13,9 @@
 
 	if (browser) importLibraries();
 
-	let move = $state(true),
+	let hosting = $state(undefined),
+		gameCode: string | number | undefined = $state(undefined),
+		move = $state(true),
 		pan = $state(true),
 		zoom = $state(true),
 		mapProvider = $state<"google" | "mapbox">("mapbox");
@@ -41,7 +43,20 @@
 
 {#if $librariesImported && position}
 	<Panorama {position} blurred={displayMode == "results"} {move} {pan} {zoom} />
-	<Map {mapProvider} {displayMode} actual={position} otherPlayers={[]} {confirm} />
+	<Map
+		{mapProvider}
+		{displayMode}
+		buttonText={displayMode == "setup"
+			? hosting == true
+				? "Start game"
+				: hosting == false
+					? "Join game"
+					: null
+			: "Guess"}
+		actual={position}
+		otherPlayers={[]}
+		{confirm}
+	/>
 
 	{#if displayMode == "results"}
 		<ResultsView {proceed} />
@@ -61,6 +76,6 @@
 	</div>
 
 	{#if displayMode == "setup"}
-		<Setup bind:move bind:pan bind:zoom bind:mapProvider />
+		<Setup bind:hosting bind:gameCode bind:move bind:pan bind:zoom bind:mapProvider />
 	{/if}
 </div>
