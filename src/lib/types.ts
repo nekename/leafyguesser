@@ -24,6 +24,7 @@ export type PlayerboundData =
 							colour: string;
 							position: Position;
 						}[];
+						points: { [name: string]: number };
 				  };
 	  };
 

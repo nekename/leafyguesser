@@ -9,7 +9,7 @@
 	import { chooseLocation } from "#lib/location.ts";
 	import { createGame, joinGame } from "#lib/peer.ts";
 	import type { HostboundData, PlayerboundData, Position } from "#lib/types.ts";
-	import { stringToColour } from "#lib/utils.ts";
+	import { getPoints, stringToColour } from "#lib/utils.ts";
 
 	import { browser } from "$app/env";
 
@@ -36,6 +36,7 @@
 	let guess = $state<Position | undefined>(undefined);
 	let confirmed = $state(false);
 	let otherPlayers = $state<{ name: string; colour: string; position: Position }[]>([]);
+	let points = $state<{ [name: string]: number }>({});
 
 	let peer: Peer | null = $state(null);
 	let connections: DataConnection[] = $state([]);
@@ -47,6 +48,8 @@
 				colour: stringToColour(player),
 				position: data.payload
 			});
+			points[player] ??= 0;
+			points[player] += getPoints(data.payload, position);
 			if (confirmed && connections.length == otherPlayers.length) displayMode = "results";
 		}
 	}
@@ -65,6 +68,7 @@
 				confirmed = false;
 			} else if (data.payload.value == "results") {
 				otherPlayers = data.payload.otherPlayers;
+				points = data.payload.points;
 			}
 			displayMode = data.payload.value;
 		}
@@ -145,7 +149,8 @@
 								? [{ name: "Host", colour: stringToColour("Host"), position: guess }]
 								: []),
 							...otherPlayers.filter((p) => p.name != c.peer)
-						]
+						],
+						points
 					}
 				} as PlayerboundData);
 			}
@@ -191,10 +196,12 @@
 				joinState = { state: "idle" };
 				gameCode = undefined;
 			}
-		} else if (displayMode == "play") {
+		} else if (displayMode == "play" && guess) {
 			confirmed = true;
-			if (hosting && connections.length == otherPlayers.length) {
-				displayMode = "results";
+			if (hosting) {
+				points["Host"] ??= 0;
+				points["Host"] += getPoints(guess, position);
+				if (connections.length == otherPlayers.length) displayMode = "results";
 			} else if (hosting == false) {
 				connections[0].send({ type: "guess", payload: guess } as HostboundData);
 			}
@@ -253,7 +260,15 @@
 	/>
 
 	{#if hosting != undefined && displayMode == "results"}
-		<ResultsView {hosting} {proceed} />
+		<ResultsView
+			{hosting}
+			{proceed}
+			name={hosting ? "Host" : peer!.id}
+			actual={position}
+			{guess}
+			{otherPlayers}
+			{points}
+		/>
 	{/if}
 {/if}
 
