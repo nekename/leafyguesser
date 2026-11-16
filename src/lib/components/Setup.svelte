@@ -5,6 +5,7 @@
 		hosting = $bindable(undefined),
 		gameCode = $bindable(undefined),
 		joinState,
+		join,
 		move = $bindable(true),
 		pan = $bindable(true),
 		zoom = $bindable(true),
@@ -13,6 +14,7 @@
 		hosting: boolean | undefined;
 		gameCode: string | number | undefined;
 		joinState: { state: "idle" | "joining" | "joined" } | { state: "error"; message: string };
+		join: () => void;
 		move: boolean;
 		pan: boolean;
 		zoom: boolean;
@@ -116,6 +118,9 @@
 								.toString()
 								.padStart(6, "0")}
 						onwheel={(event) => event.preventDefault()}
+						onkeyup={(event) => {
+							if (event.key == "Enter") join();
+						}}
 					/>
 				</td>
 			</tr>

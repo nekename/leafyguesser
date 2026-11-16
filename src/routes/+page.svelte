@@ -285,6 +285,15 @@
 	</div>
 
 	{#if displayMode == "setup" && joinState.state != "joined"}
-		<Setup bind:hosting bind:gameCode {joinState} bind:move bind:pan bind:zoom bind:mapProvider />
+		<Setup
+			bind:hosting
+			bind:gameCode
+			{joinState}
+			{join}
+			bind:move
+			bind:pan
+			bind:zoom
+			bind:mapProvider
+		/>
 	{/if}
 </div>
